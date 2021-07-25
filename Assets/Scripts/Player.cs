@@ -5,13 +5,13 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float slideSpeed;
     public Rigidbody2D rb;
     public Animator animator;
     public bool pushable;
     private Vector2 movement;
-    private Direction lastInput;
     private Collision2D coll;
-    private Direction directionStatus;
+    public bool slime;
 
 
     // Update is called once per frame
@@ -34,21 +34,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-        if(collision.gameObject.tag == "Moveable")
-        {
-            collision.transform.parent = transform;
-            lastInput = directionStatus;
-            coll = collision;
-        }
-    }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "SlimeTiles")
         {
+            slime = true;
             Debug.Log("Dit is slijmerig");
         }
     }
@@ -57,6 +49,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "SlimeTiles")
         {
+            slime = false;
             Debug.Log("Dit is droog");
         }
     }
@@ -68,63 +61,20 @@ public class Player : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        
 
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-        directionStatus = GetDirection(movement);
-
-        if (lastInput != directionStatus && coll != null)
+        if (slime == false)
         {
-            coll.transform.parent = null;
+           rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
             
-            
-        }
-
-        //Debug.Log(lastInput + "<lastInput  directionstatus>" + directionStatus);
-
-    }
-
-    public enum Direction
-    {
-        Up,
-        Down,
-        Right,
-        Left,
-        None
-    }
-
-    public Direction GetDirection(Vector2 playerDirection)
-    {
-        if(playerDirection == Vector2.up)
-        {
-            Debug.Log("Up");
-            return Direction.Up;
-        }
-
-        else if(playerDirection == Vector2.down)
-        {
-            Debug.Log("Down");
-            return Direction.Down;
-        }
-
-        else if (playerDirection == Vector2.right)
-        {
-            Debug.Log("Right");
-            return Direction.Right;
-
-        }
-
-        else if (playerDirection == Vector2.left)
-        {
-            Debug.Log("Left");
-            return Direction.Left;
-
         }
 
         else
         {
-            Debug.Log("None");
-            return Direction.None;
-
+            rb.AddForce(rb.position + movement * slideSpeed * Time.fixedDeltaTime);
         }
+
     }
+
+    
 }

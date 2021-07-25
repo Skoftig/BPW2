@@ -16,14 +16,9 @@ public class Moveable : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Debug.Log("dit is de barrel");
-        //if (collision.gameObject.tag == "Moveable")
-        //{
-        //    collision.transform.parent = transform;
-
-        //}
+        Debug.Log("I am hit");
     }
 
 }
