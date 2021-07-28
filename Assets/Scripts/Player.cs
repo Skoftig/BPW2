@@ -61,7 +61,6 @@ public class Player : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        
 
         if (slime == false)
         {
@@ -69,10 +68,10 @@ public class Player : MonoBehaviour
             
         }
 
-        else
-        {
+       else
+       {
             rb.AddForce(rb.position + movement * slideSpeed * Time.fixedDeltaTime);
-        }
+       }
 
     }
 
