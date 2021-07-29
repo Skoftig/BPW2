@@ -21,27 +21,27 @@ public class Player : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        
+
 
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, movement);
-        if(hit.collider != null)
+        if (hit.collider != null)
         {
             Debug.Log(hit.collider.gameObject.name);
         }
     }
 
-    
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "SlimeTiles")
+        if (collision.gameObject.tag == "SlimeTiles")
         {
             slime = true;
-            Debug.Log("Dit is slijmerig");
+            //Debug.Log("Dit is slijmerig");
         }
     }
 
@@ -50,30 +50,32 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "SlimeTiles")
         {
             slime = false;
-            Debug.Log("Dit is droog");
+            //Debug.Log("Dit is droog");
         }
     }
+
 
     /// <summary>
     /// FixedUpdate is more reliable when working with Physics, as the normal Update can vary. 
     /// To ensure movement speed stays the same no matter how many times the update is called, it is multiplied with 
     /// Time.fixedDeltaTime
+    /// I want the player to slide on the slime tiles, I use an if and else statement. When on dry land, the player moves
+    /// with movePosition for accurate movement, but when on slime, I use AddForce to give the player more fluid movement.
     /// </summary>
     private void FixedUpdate()
     {
-
         if (slime == false)
         {
-           rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-            
+            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+
         }
 
-       else
-       {
+        else
+        {
             rb.AddForce(rb.position + movement * slideSpeed * Time.fixedDeltaTime);
-       }
+        }
 
     }
 
-    
+
 }
