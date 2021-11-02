@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     public Vector2[] directions = new Vector2[4] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
     public Axis currentAxis;
     private int RaycastLayers;
+    public float RaycastLength;
 
 
     private void Start()
@@ -57,10 +58,11 @@ public class Player : MonoBehaviour
             ////    Debug.Log(hit.collider.gameObject.name);
             ////}
             #endregion
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, directions[i], 1, LayerMask.GetMask("Details"));
-            Debug.DrawRay(transform.position, directions[i] * 1, Color.red);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, directions[i], RaycastLength, LayerMask.GetMask("Details"));
+            Debug.DrawRay(transform.position, directions[i] * RaycastLength, Color.red);
             if (hit)
             {
+                rb.velocity = Vector2.zero;
                 slime = false;
                 //possibly 3e state maken, soort pre-slide phase waarin speler direction kiest
                 ChangeState(States.Changing);
@@ -159,6 +161,7 @@ public class Player : MonoBehaviour
         if (slime)
         {
             rb.AddForce((Vector2)transform.position + currentDirection * slideSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
+            Debug.Log((Vector2)transform.position + currentDirection * slideSpeed * Time.fixedDeltaTime);
             switch (currentAxis)
             {
                 case Axis.Horizontal:
@@ -173,7 +176,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            //ChangeState(States.Walking);
             if (Input.GetAxisRaw("Horizontal") > 0 || Input.GetAxisRaw("Horizontal") < 0)
             {
                 rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -195,12 +197,14 @@ public class Player : MonoBehaviour
                 }
 
             }
+            currentDirection = movement;
         }
 
     }
     /// <summary>
     /// https://answers.unity.com/questions/238887/can-you-unfreeze-a-rigidbodyconstraint-position-as.html
     /// used for unfreezing constraints
+    /// weird bug solved by reassigning currentDirection to be identical to movement solving the issue of the player moving in the wrong direction.
     /// </summary>
     private void Walking()
     {
@@ -223,21 +227,23 @@ public class Player : MonoBehaviour
             }
 
         }
-
         currentDirection = movement;
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
     private void Changing()
     {
-        if (Input.GetAxisRaw("Horizontal") > 0 || Input.GetAxisRaw("Horizontal") < 0)
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        currentDirection = Vector2.zero;
+        if (horizontal > 0 || horizontal < 0)
         {
-            Debug.Log("Links/Rechts");
+            currentDirection = new Vector2(horizontal, 0);
         }
 
-        else if(Input.GetAxisRaw("Vertical") > 0 || Input.GetAxisRaw("Vertical") < 0)
+        else if(vertical > 0 || vertical < 0)
         {
-            Debug.Log("Boven/Beneden");
+            currentDirection = new Vector2(0, vertical);
         }
 
         ChangeState(States.Sliding);
