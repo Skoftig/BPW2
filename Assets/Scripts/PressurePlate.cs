@@ -5,9 +5,11 @@ using UnityEngine.Events;
 
 public class PressurePlate : MonoBehaviour
 {
+    public UnityEvent onActivate;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        
         //if (collision.gameObject.name == "barrel" )
 
         if (collision.gameObject.name.Contains("barrel"))
@@ -15,6 +17,7 @@ public class PressurePlate : MonoBehaviour
             Rigidbody2D Temp = collision.gameObject.GetComponent<Rigidbody2D>();
             Temp.constraints = RigidbodyConstraints2D.FreezeAll;
             collision.gameObject.transform.position = transform.position;
+            onActivate.Invoke();
         }
     }
 }
