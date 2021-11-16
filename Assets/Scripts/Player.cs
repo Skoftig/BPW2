@@ -25,52 +25,28 @@ public class Player : MonoBehaviour
     {
         ChangeState(States.Walking);
     }
-
-
     // Update is called once per frame
     private void Update()
     {
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
-
-
     }
 
     private void ShootRaycast(Vector2[] directions)
     {
-        Debug.Log("Ik ben aan het casten.");
         RaycastLayers = LayerMask.GetMask("Details");
         for (int i = 0; i < directions.Length; i++)
         {
-            #region Deprecated code
-            //Debug.Log("Hier is de cast.");
-            //RaycastHit2D[] hit; // = Physics2D.Raycast(transform.position, directions[i], 100);
-            //Ray2D ray = new Ray2D(transform.position, directions[i]);
-            //Debug.DrawRay(transform.position, directions[i] * 100);
-            ////if (Physics2D.Raycast(ray.origin, ray.direction * 100, 1, hit))
-            ////{
-
-            ////}
-
-            ////if (hit)
-            ////{
-            ////    Debug.Log(hit.collider.gameObject.name);
-            ////}
-            #endregion
             RaycastHit2D hit = Physics2D.Raycast(transform.position, directions[i], RaycastLength, LayerMask.GetMask("Details"));
             Debug.DrawRay(transform.position, directions[i] * RaycastLength, Color.red);
             if (hit)
             {
                 rb.velocity = Vector2.zero;
                 slime = false;
-                //possibly 3e state maken, soort pre-slide phase waarin speler direction kiest
                 ChangeState(States.Changing);
             }
-
-
         }
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -79,7 +55,6 @@ public class Player : MonoBehaviour
         {
             ChangeState(States.Sliding);
             slime = true;
-            Debug.Log("Dit is slijmerig");
         }
     }
 
@@ -89,10 +64,8 @@ public class Player : MonoBehaviour
         {
             ChangeState(States.Walking);
             slime = false;
-            Debug.Log("Dit is droog");
         }
     }
-
 
     /// <summary>
     /// FixedUpdate is more reliable when working with Physics, as the normal Update can vary. 
@@ -103,37 +76,6 @@ public class Player : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        #region Deprecated
-        //if (Input.GetAxisRaw("Horizontal") > 0 || Input.GetAxisRaw("Horizontal") < 0)
-        //{
-        //    movement.x = Input.GetAxisRaw("Horizontal");
-        //}
-
-        //else
-        //{
-        //    if (Input.GetAxisRaw("Vertical") > 0 || Input.GetAxisRaw("Vertical") < 0)
-        //    {
-        //        movement.y = Input.GetAxisRaw("Vertical");
-        //    }
-
-        //}
-
-
-        //if (!slime)
-        //{
-        //    rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-
-        //}
-
-        //else
-        //{
-        //    //Debug.Log(movement);
-        //    rb.AddForce((Vector2)transform.position + movement * slideSpeed * Time.fixedDeltaTime);
-        //    Debug.Log((Vector2)transform.position + movement * slideSpeed * Time.fixedDeltaTime);
-        //}
-
-        #endregion
-
         movement = Vector2.zero;
 
         switch (currentState)
@@ -141,15 +83,12 @@ public class Player : MonoBehaviour
             case States.Walking:
                 Walking();
                 break;
-
             case States.Sliding:
                 Sliding();
                 break;
-
             case States.Changing:
                 Changing();
                 break;
-
             default:
                 break;
         }
@@ -157,11 +96,9 @@ public class Player : MonoBehaviour
 
     private void Sliding()
     {
-
         if (slime)
         {
             rb.AddForce((Vector2)transform.position + currentDirection * slideSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
-            Debug.Log((Vector2)transform.position + currentDirection * slideSpeed * Time.fixedDeltaTime);
             switch (currentAxis)
             {
                 case Axis.Horizontal:
@@ -195,11 +132,9 @@ public class Player : MonoBehaviour
                     slime = true;
                     currentAxis = Axis.Vertical;
                 }
-
             }
             currentDirection = movement;
         }
-
     }
     /// <summary>
     /// https://answers.unity.com/questions/238887/can-you-unfreeze-a-rigidbodyconstraint-position-as.html
