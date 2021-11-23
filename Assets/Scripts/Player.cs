@@ -42,6 +42,12 @@ public class Player : MonoBehaviour
             Debug.DrawRay(transform.position, directions[i] * RaycastLength, Color.red);
             if (hit)
             {
+                BarrelSlide slide = hit.collider.gameObject.GetComponent<BarrelSlide>();
+                if (slide)
+                {
+                    Debug.Log("Barrel be slidin" + directions[i]);
+                    slide.velocity = directions[i];
+                }
                 rb.velocity = Vector2.zero;
                 slime = false;
                 ChangeState(States.Changing);
