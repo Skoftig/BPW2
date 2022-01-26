@@ -7,18 +7,16 @@ public class GameManager : MonoBehaviour
 {
     public void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.gameObject.name == "Player")
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
-        
     }
 
-    public void LoadNextLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    //public void LoadNextLevel()
+    //{
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    //}
 
     public void CompleteLevel()
     {

@@ -28,8 +28,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        animator.SetFloat("Horizontal", movement.x);
-        animator.SetFloat("Vertical", movement.y);
+        animator.SetFloat("Horizontal", currentDirection.x);
+        animator.SetFloat("Vertical", currentDirection.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
     }
 
@@ -182,7 +182,7 @@ public class Player : MonoBehaviour
             currentDirection = new Vector2(horizontal, 0);
         }
 
-        else if(vertical > 0 || vertical < 0)
+        else if (vertical > 0 || vertical < 0)
         {
             currentDirection = new Vector2(0, vertical);
         }

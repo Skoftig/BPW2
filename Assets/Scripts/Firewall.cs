@@ -11,7 +11,6 @@ public class Firewall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.collider.gameObject.name);
         StartCoroutine(FireReset());
     }    
 
@@ -22,7 +21,6 @@ public class Firewall : MonoBehaviour
 
     private IEnumerator FireReset()
     {
-        Debug.Log("Nu zit je in de couroutine");
         deathScreen.SetActive(true);
         yield return new WaitForSeconds(waitTime);
         deathScreen.SetActive(false);
