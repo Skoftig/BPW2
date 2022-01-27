@@ -13,12 +13,10 @@ public class Firewall : MonoBehaviour
     {
         StartCoroutine(FireReset());
     }    
-
     public void TurnOff()
     {
         gameObject.SetActive(false);
     }
-
     private IEnumerator FireReset()
     {
         deathScreen.SetActive(true);

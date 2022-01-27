@@ -9,7 +9,6 @@ public class PressurePlateManager : MonoBehaviour
     private bool CanOpenFire;
     public UnityEvent plateEvent;
 
-    // Update is called once per frame
     void Update()
     {
         foreach (PressurePlate pressurePlate in pressurePlates)

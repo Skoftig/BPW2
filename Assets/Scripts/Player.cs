@@ -73,13 +73,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// FixedUpdate is more reliable when working with Physics, as the normal Update can vary. 
-    /// To ensure movement speed stays the same no matter how many times the update is called, it is multiplied with 
-    /// Time.fixedDeltaTime
-    /// I want the player to slide on the slime tiles, I use an if and else statement. When on dry land, the player moves
-    /// with movePosition for accurate movement, but when on slime, I use AddForce to give the player more fluid movement.
-    /// </summary>
     private void FixedUpdate()
     {
         movement = Vector2.zero;
